@@ -1,0 +1,70 @@
+<tool id="association_test" name="Association Test (Logistic)" version="1.0.0">
+    <description>Performs SNP-by-SNP association testing</description>
+    
+    <requirements>
+        <requirement type="package" version="3.8">python</requirement>
+        <requirement type="package" version="1.4.1">pandas</requirement>
+        <requirement type="package" version="1.20.0">numpy</requirement>
+        <requirement type="package" version="0.12.2">statsmodels</requirement>
+    </requirements>
+    
+    <command>
+        <![CDATA[
+        python '$__tool_directory__/association_test.py'
+            --genotypes '$genotypes_file'
+            --pheno_cov '$pheno_cov_file'
+            #if $snp_annot_file:
+                --snp_annot '$snp_annot_file'
+            #end if
+            --phenotype_name '$phenotype_name'
+            --covariates '$covariates'
+            --min_maf $min_maf
+            --missing_val '$missing_val'
+            --output '$output_file'
+        ]]>
+    </command>
+    
+    <inputs>
+        <param name="genotypes_file" type="data" format="tabular" label="QC'd Genotypes File" help="Genotype data that has passed QC."/>
+        <param name="pheno_cov_file" type="data" format="tabular" label="Phenotypes and Covariates File" help="File with one row per sample, containing the phenotype and any covariates."/>
+        <param name="snp_annot_file" type="data" format="tabular" optional="true" label="SNP Annotation File (for MAF)" help="Optional. Used to filter SNPs by MAF before testing. Must contain 'maf' and 'snp_id' columns."/>
+        
+        <param name="phenotype_name" type="text" value="phenotype" label="Phenotype Column Name" help="The exact name of the column in your Phenotypes file that contains the trait to be tested (e.g., 'phenotype', 'disease_status')."/>
+        <param name="covariates" type="text" value="age,sex" label="Covariates" help="A comma-separated list of column names to use as covariates (e.g., 'age,sex,PC1'). Leave blank for no covariates."/>
+        <param name="min_maf" type="float" value="0.01" label="Minimum MAF Threshold" help="SNPs with MAF below this value will not be tested."/>
+        <param name="missing_val" type="text" value="NA" label="Missing Value Representation" help="The string used to denote missing genotypes."/>
+    </inputs>
+    
+    <outputs>
+        <data name="output_file" format="tabular" label="${tool.name} on ${on_string}: Association Results"/>
+    </outputs>
+    
+    <help>
+        <![CDATA[
+        **What it does**
+
+        This tool performs an association test for each SNP to determine if it is significantly associated with a binary (0/1) phenotype. It uses a **logistic regression** model.
+
+        For each SNP, the model is: `phenotype ~ genotype + covariates`
+
+        Including covariates (like age, sex, or principal components) allows you to control for population structure and other confounding factors, leading to more reliable results.
+
+        **Inputs**
+
+        - **QC'd Genotypes File:** The filtered genotype data from Tool 1.
+        - **Phenotypes and Covariates File:** A file containing the phenotype (as 0s and 1s) and any columns you wish to use as covariates.
+        - **SNP Annotation File (Optional):** If you provide the output from Tool 2 (Allele Freq Calc) or another file with a 'maf' column, you can filter out low-MAF SNPs before testing to save time.
+        - **Covariates:** You must provide a comma-separated list of the exact column names you want to adjust for.
+
+        **Output**
+
+        - **A single tabular file** with one row per tested SNP, containing the core results of the GWAS:
+            - **chrom, pos:** The SNP's genomic location.
+            - **beta:** The effect size of the SNP's minor allele.
+            - **se:** The standard error of the beta.
+            - **z:** The z-score.
+            - **p_value:** The statistical significance of the association. A smaller p-value indicates a stronger association.
+            - **maf:** The minor allele frequency of the SNP.
+        ]]>
+    </help>
+</tool>

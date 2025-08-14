@@ -1,0 +1,15 @@
+<tool id="example_text_tool" name="Example Text Tool" version="1.0.0">
+    <description>Processes a text file and outputs a result</description>
+    <command>
+        python '$__tool_directory__/example_text_tool.py' '$input' '$output'
+    </command>
+    <inputs>
+        <param name="input" type="data" format="txt" label="Input text file"/>
+    </inputs>
+    <outputs>
+        <data name="output" format="txt" label="Processed output"/>
+    </outputs>
+    <help>
+        This tool processes a text file and outputs the result.
+    </help>
+</tool>

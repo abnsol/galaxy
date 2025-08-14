@@ -1,0 +1,13 @@
+<tool id="line_counter" name="Line Counter" version="1.0.0">
+    <description>Counts the number of lines in a text file</description>
+    <command>python '$__tool_directory__/line_count.py' --input '${input_file}' --output '${output1}'</command>
+    <inputs>
+        <param name="input_file" type="data" format="txt" label="Input text file"/>
+    </inputs>
+    <outputs>
+        <data name="output1" format="txt" label="Line count result" />
+    </outputs>
+    <requirements>
+        <requirement type="package" version="3.6">python</requirement>
+    </requirements>
+</tool>

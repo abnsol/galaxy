@@ -1,0 +1,18 @@
+<tool id="word count" name="Word Count" version="1.0.0">
+    <description>Count words in a text file</description>
+    <inputs>
+        <param name="input_file" type="data" format="txt" label="Input text file"/>
+    </inputs>
+    <outputs>
+        <data name="output" format="txt" label="Word count output"/>
+    </outputs>
+    <command>
+        python '$__tool_directory__/word_count.py' --input '${input_file}' --output '${output}'
+    </command>
+    <requirements>
+        <requirement type="package" version="3.6">python</requirement>
+    </requirements>
+    <help>
+        This tool counts the number of words in the input text file.
+    </help>
+</tool>

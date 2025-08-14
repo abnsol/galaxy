@@ -1,0 +1,61 @@
+<tool id="windowed_ld_calculator" name="Windowed LD Calculator" version="1.0.0">
+    <description>Computes LD (r²) for SNPs within a genomic window</description>
+    
+    <requirements>
+        <requirement type="package" version="3.8">python</requirement>
+        <requirement type="package" version="1.4.1">pandas</requirement>
+        <requirement type="package" version="1.20.0">numpy</requirement>
+        <requirement type="package" version="3.4.3">matplotlib</requirement>
+        <requirement type="package" version="0.11.2">seaborn</requirement>
+    </requirements>
+    
+    <command>
+        <![CDATA[
+        python '$__tool_directory__/ld_calculator.py'
+            --genotypes '$genotypes_file'
+            --snp_annot '$snp_annot_file'
+            --focal_snp '$focal_snp'
+            --window_kb $window_kb
+            --min_maf $min_maf
+            --missing_val '$missing_val'
+            --out_matrix '$out_matrix'
+            --out_png '$out_png'
+        ]]>
+    </command>
+    
+    <inputs>
+        <param name="genotypes_file" type="data" format="tabular" label="QC'd Genotypes File" help="Genotype data that has passed QC."/>
+        <param name="snp_annot_file" type="data" format="tabular" label="SNP Annotation File" help="File with SNP info (chrom, pos, maf). The output from Tool 2 is ideal."/>
+        
+        <param name="focal_snp" type="text" value="rs100999" label="Focal SNP ID" help="The ID of the SNP to center the window on (e.g., a top hit from your GWAS)."/>
+        <param name="window_kb" type="integer" value="250" label="Window Size (in kb)" help="The size of the window on each side of the focal SNP."/>
+        <param name="min_maf" type="float" value="0.01" label="Minimum MAF Threshold" help="SNPs with MAF below this value will be excluded."/>
+        <param name="missing_val" type="text" value="NA" label="Missing Value Representation" help="The string used to denote missing genotypes."/>
+    </inputs>
+    
+    <outputs>
+        <data name="out_matrix" format="tabular" label="${tool.name} on ${on_string}: LD Matrix"/>
+        <data name="out_png" format="png" label="${tool.name} on ${on_string}: LD Heatmap"/>
+    </outputs>
+    
+    <help>
+        <![CDATA[
+        **What it does**
+
+        This tool calculates Linkage Disequilibrium (LD) for a set of SNPs within a specified genomic region. LD is the non-random association of alleles at different loci. It is typically measured by r-squared (r²).
+
+        This is useful for fine-mapping a GWAS signal. After identifying a significant SNP, you can use this tool to see which other nearby SNPs are correlated with it, helping to identify the functional region.
+
+        **Inputs**
+
+        - **QC'd Genotypes File:** The filtered genotype data.
+        - **SNP Annotation File:** A file containing chromosome, position, and MAF for each SNP. The output from the Allele Frequency Calculator is perfect for this.
+        - **Focal SNP ID:** You must provide the ID of a SNP to act as the center of your window. This is typically the most significant SNP from your association test.
+
+        **Outputs**
+
+        - **LD Matrix (tabular):** A table containing the pairwise r² values for all SNPs in the window.
+        - **LD Heatmap (PNG):** A graphical representation of the LD matrix, where darker colors indicate stronger correlation (higher r²).
+        ]]>
+    </help>
+</tool>

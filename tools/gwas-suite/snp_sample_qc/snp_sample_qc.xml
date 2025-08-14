@@ -1,0 +1,80 @@
+<tool id="snp_sample_qc" name="SNP and Sample QC" version="1.0.0">
+    <description>Filters genotype data based on missingness and MAF</description>
+    
+    <requirements>
+        <!-- This tells Galaxy that the tool needs Python 3 and the pandas library -->
+        <requirement type="package" version="3.8">python</requirement>
+        <requirement type="package" version="1.4.1">pandas</requirement>
+        <requirement type="package" version="1.20.0">numpy</requirement>
+    </requirements>
+    
+    <command>
+        <![CDATA[
+        python '$__tool_directory__/snp_sample_qc.py'
+            --genotypes '$genotypes_file'
+            --snp_annot '$snp_annot_file'
+            #if $pheno_file:
+                --pheno '$pheno_file'
+                --out_pheno '$out_pheno'
+            #end if
+            --maf_thresh $maf_thresh
+            --snp_miss $snp_miss
+            --sample_miss $sample_miss
+            --missing_val '$missing_val'
+            --out_geno '$out_geno'
+            --out_snp '$out_snp'
+            --out_report '$out_report'
+            --out_samples '$out_samples'
+        ]]>
+    </command>
+    
+    <inputs>
+        <!-- Input Data Files -->
+        <param name="genotypes_file" type="data" format="tabular" label="Genotypes File" help="A tab-separated file with samples as rows and SNPs as columns."/>
+        <param name="snp_annot_file" type="data" format="tabular" label="SNP Annotation File" help="A tab-separated file with SNP information, including a 'maf' column."/>
+        <param name="pheno_file" type="data" format="tabular" optional="true" label="Phenotypes/Covariates File (Optional)" help="Optional tab-separated file with sample information."/>
+        
+        <!-- QC Parameters -->
+        <param name="maf_thresh" type="float" value="0.01" label="MAF Threshold" help="Remove SNPs with MAF below this value."/>
+        <param name="snp_miss" type="float" value="0.05" label="SNP Missingness Threshold" help="Remove SNPs with missing data in more than this fraction of samples."/>
+        <param name="sample_miss" type="float" value="0.1" label="Sample Missingness Threshold" help="Remove samples with missing data for more than this fraction of SNPs."/>
+        <param name="missing_val" type="text" value="NA" label="Missing Value Representation" help="The string used to denote missing genotypes (e.g., 'NA', '-1')."/>
+    </inputs>
+    
+    <outputs>
+        <!-- Defines the files that the tool will generate -->
+        <data name="out_geno" format="tabular" label="${tool.name} on ${on_string}: Filtered Genotypes"/>
+        <data name="out_snp" format="tabular" label="${tool.name} on ${on_string}: Filtered SNP Annotation"/>
+        <data name="out_report" format="txt" label="${tool.name} on ${on_string}: QC Report"/>
+        <data name="out_samples" format="tabular" label="${tool.name} on ${on_string}: Kept Sample List"/>
+        
+        <!-- This output is created only if the optional phenotype file was provided as an input -->
+        <data name="out_pheno" format="tabular" label="${tool.name} on ${on_string}: Filtered Phenotypes">
+            <filter>pheno_file is not None</filter>
+        </data>
+    </outputs>
+    
+    <help>
+        <![CDATA[
+        **What it does**
+
+        This tool performs standard quality control on GWAS data. It filters out unreliable SNPs and samples based on user-defined thresholds for:
+
+        - **SNP Missingness:** Removes SNPs that fail to genotype in too many samples.
+        - **Minor Allele Frequency (MAF):** Removes very rare SNPs that lack statistical power.
+        - **Sample Missingness:** Removes samples (individuals) with poor quality DNA that resulted in too many missing SNP calls.
+
+        **Inputs**
+
+        - **Genotypes File:** A tab-separated file where rows are samples and columns are SNPs.
+        - **SNP Annotation File:** A tab-separated file containing at least 'snp_id' and 'maf' columns.
+        - **Phenotypes File (Optional):** If provided, it will be filtered to match the samples that pass QC.
+
+        **Outputs**
+
+        - **Filtered Data:** Filtered versions of the genotype, SNP, and phenotype files.
+        - **QC Report:** A text file summarizing how many SNPs and samples were removed at each step.
+        - **Kept Sample List:** A simple, one-column file listing the 'sample_id' of every sample that passed QC.
+        ]]>
+    </help>
+</tool>

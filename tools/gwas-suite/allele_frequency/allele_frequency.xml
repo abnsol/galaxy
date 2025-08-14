@@ -1,0 +1,57 @@
+<tool id="allele_freq_calculator" name="Allele Frequency Calculator" version="1.0.0">
+    <description>Computes per-SNP allele counts and MAF</description>
+    
+    <requirements>
+        <requirement type="package" version="3.8">python</requirement>
+        <requirement type="package" version="1.4.1">pandas</requirement>
+        <requirement type="package" version="1.20.0">numpy</requirement>
+    </requirements>
+    
+    <command>
+        <![CDATA[
+        python '$__tool_directory__/allele_frequency.py'
+            --genotypes '$genotypes_file'
+            #if $snp_annot_file:
+                --snp_annot '$snp_annot_file'
+            #end if
+            --missing_val '$missing_val'
+            --output '$output_file'
+        ]]>
+    </command>
+    
+    <inputs>
+        <param name="genotypes_file" type="data" format="tabular" label="Filtered Genotypes File" help="The genotype file that has passed QC. Rows are samples, columns are SNPs."/>
+        <param name="snp_annot_file" type="data" format="tabular" optional="true" label="SNP Annotation File (Optional)" help="If provided, chromosome and position will be added to the output."/>
+        <param name="missing_val" type="text" value="NA" label="Missing Value Representation" help="The string used to denote missing genotypes (e.g., 'NA', '-1')."/>
+    </inputs>
+    
+    <outputs>
+        <data name="output_file" format="tabular" label="${tool.name} on ${on_string}: Allele Frequencies"/>
+    </outputs>
+    
+    <help>
+        <![CDATA[
+        **What it does**
+
+        This tool calculates allele frequencies for each SNP in a given genotype file. It counts the number of samples with each genotype (0, 1, and 2) and computes the Minor Allele Frequency (MAF).
+
+        The MAF is the frequency of the less common allele in a population. It is a fundamental metric for association studies.
+
+        If a SNP has fewer than 10 non-missing samples, its MAF is reported as 'NA'.
+
+        **Inputs**
+
+        - **Filtered Genotypes File:** The main input from the SNP & Sample QC tool.
+        - **SNP Annotation File (Optional):** Providing this file adds 'chrom' and 'pos' columns to the output, which is useful for downstream analysis and plotting.
+
+        **Output**
+
+        - **A single tabular file** containing one row per SNP with the following columns:
+            - **snp_id:** The SNP identifier.
+            - **chrom, pos (optional):** Chromosome and position.
+            - **count_0, count_1, count_2:** Counts of samples with homozygous major, heterozygous, and homozygous minor genotypes, respectively.
+            - **n_non_missing:** The number of samples with valid genotype calls for the SNP.
+            - **maf:** The calculated Minor Allele Frequency.
+        ]]>
+    </help>
+</tool>

@@ -507,7 +507,7 @@ galaxy:
   # files.
   # The value of this option will be resolved with respect to
   # <config_dir>.
-  #tool_config_file: tool_conf.xml
+  # tool_config_file: tool_conf.xml
 
   # Tool config file for tools installed from the Galaxy Tool Shed. Must
   # be writable by Galaxy and generally should not be edited by hand. In
@@ -542,7 +542,7 @@ galaxy:
   # Default path to the directory containing the tools defined in
   # tool_conf.xml. Other tool config files must include the tool_path as
   # an attribute in the <toolbox> tag.
-  #tool_path: tools
+  tool_path: tools
 
   # Various dependency resolver configuration parameters will have
   # defaults set relative to this path, such as the default conda

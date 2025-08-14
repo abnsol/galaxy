@@ -1,0 +1,1 @@
+This is a sample paragraph for testing the word count functionality. It contains several sentences, each designed to provide enough words for a meaningful count. By analyzing this paragraph, you can verify that your word counting tool works correctly and efficiently.

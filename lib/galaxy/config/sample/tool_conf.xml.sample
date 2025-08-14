@@ -137,6 +137,23 @@
     <tool file="phenotype_association/ldtools.xml" />
     <tool file="phenotype_association/master2pg.xml" />
   </section>
+  <!-- <section id="ex tool" name="ex tool">
+    <tool file="/workspaces/galaxy/tools/example_text_tool/example_text_tool.xml"/>
+  </section>
+  <section id="word" name="count">
+    <tool file="/workspaces/galaxy/tools/word_count/word_count.xml"/>
+  </section>
+  <section id="line" name="count">
+    <tool file="/workspaces/galaxy/tools/line_count/line_count.xml"/>
+  </section> -->
+  <section id="gwas suite" name="gwas suite">
+    <tool file="/workspaces/galaxy/tools/Gwas-data/snp_sample_qc/snp_sample_qc.xml"/>
+    <tool file="/workspaces/galaxy/tools/Gwas-data/allele_frequency/allele_frequency.xml"/>
+    <tool file="/workspaces/galaxy/tools/Gwas-data/assosiation_test/association_test.xml"/>
+    <tool file="/workspaces/galaxy/tools/Gwas-data/manhattan_plot/manhattan_plot.xml"/>
+    <tool file="/workspaces/galaxy/tools/Gwas-data/ld_calculator/ld_calculator.xml" />
+  </section>
+
   <!--
   <section id="interactivetools" name="Interactive tools">
     <tool file="interactive/interactivetool_askomics.xml" />
