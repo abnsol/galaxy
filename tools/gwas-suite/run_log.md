@@ -1,7 +1,7 @@
 # GWAS Workflow Run Log
 
 **Date:** August 14, 2025  
-**Analyst:** [Your Name Here]  
+**Analyst:** Abenezer  
 
 This log documents the execution of the **5-tool GWAS workflow** on the provided synthetic dataset.
 
