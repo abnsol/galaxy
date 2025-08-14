@@ -32,8 +32,12 @@ def main():
     # --- Data Loading ---
     try:
         geno_df = pd.read_csv(args.genotypes, sep='\t', index_col=0)
-        snp_annot_df = pd.read_csv(args.snp_annot, sep='\t', index_col='snp_id')
-        
+
+        try:
+            snp_annot_df = pd.read_csv(args.snp_annot, sep='\t', index_col='snp_id')
+        except ValueError:
+            snp_annot_df = pd.read_csv(args.snp_annot, sep='\t', index_col=0)
+
         pheno_df = None
         if args.pheno:
             pheno_df = pd.read_csv(args.pheno, sep='\t', index_col='sample_id')
@@ -116,18 +120,17 @@ def main():
     with open(args.out_report, 'w') as f:
         f.write(report_content)
 
-    geno_df.fillna(-1, inplace=True) 
+    geno_df.fillna(-1, inplace=True)
     geno_df = geno_df.astype(int)
     geno_df.replace(-1, args.missing_val, inplace=True)
 
-    geno_df.to_csv(args.out_geno, sep='\t')
-    snp_annot_df.to_csv(args.out_snp, sep='\t')
+    geno_df.to_csv(args.out_geno, sep='\t', index_label='sample_id')
+    snp_annot_df.to_csv(args.out_snp, sep='\t', index_label='snp_id')
     
-    # Save the list of samples that passed QC
     pd.DataFrame(final_samples, columns=['sample_id']).to_csv(args.out_samples, sep='\t', index=False)
 
     if args.out_pheno and pheno_df is not None:
-        pheno_df.to_csv(args.out_pheno, sep='\t')
+        pheno_df.to_csv(args.out_pheno, sep='\t', index_label='sample_id')
 
     print("QC process completed successfully.")
 

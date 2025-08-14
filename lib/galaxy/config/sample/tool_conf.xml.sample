@@ -147,11 +147,11 @@
     <tool file="/workspaces/galaxy/tools/line_count/line_count.xml"/>
   </section> -->
   <section id="gwas suite" name="gwas suite">
-    <tool file="/workspaces/galaxy/tools/Gwas-data/snp_sample_qc/snp_sample_qc.xml"/>
-    <tool file="/workspaces/galaxy/tools/Gwas-data/allele_frequency/allele_frequency.xml"/>
-    <tool file="/workspaces/galaxy/tools/Gwas-data/assosiation_test/association_test.xml"/>
-    <tool file="/workspaces/galaxy/tools/Gwas-data/manhattan_plot/manhattan_plot.xml"/>
-    <tool file="/workspaces/galaxy/tools/Gwas-data/ld_calculator/ld_calculator.xml" />
+    <tool file="/workspaces/galaxy/tools/gwas-suite/allele_frequency/allele_frequency.xml"/>
+    <tool file="/workspaces/galaxy/tools/gwas-suite/assosiation_test/association_test.xml"/>
+    <tool file="/workspaces/galaxy/tools/gwas-suite/ld_calculator/ld_calculator.xml"/>
+    <tool file="/workspaces/galaxy/tools/gwas-suite/manhattan_plot/manhattan_plot.xml"/>
+    <tool file="/workspaces/galaxy/tools/gwas-suite/snp_sample_qc/snp_sample_qc.xml" />
   </section>
 
   <!--
